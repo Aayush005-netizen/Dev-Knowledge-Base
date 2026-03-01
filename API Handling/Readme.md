@@ -52,12 +52,13 @@ Understood why real ML systems depend on live data sources and how APIs enable a
 ---
 
 ## 📂 Project Workflow
-```
+
+```mermaid
 flowchart LR
-A[API Request] --> B[JSON Response]
-B --> C[Data Extraction]
-C --> D[Pandas DataFrame]
-D --> E[ML-Ready Dataset]
+    A[🌐 API Request] --> B[📦 JSON Response]
+    B --> C[🔍 Data Extraction]
+    C --> D[🐼 Pandas DataFrame]
+    D --> E[✅ ML-Ready Dataset]
 ```
 
 ---
