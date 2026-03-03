@@ -1,5 +1,16 @@
 # Machine Learning Notes
 
-## Page 1
-
-![ML Notes Page 1](Photos/ML_Notes_1.jpg)
+![ML Notes Page 1](https://raw.githubusercontent.com/Aayush005-netizen/Dev-Knowledge-Base/main/Photos/ML_Notes_1.jpg)
+![ML Notes Page 1](https://raw.githubusercontent.com/Aayush005-netizen/Dev-Knowledge-Base/main/Photos/ML_Notes_2.jpg)
+![ML Notes Page 1](https://raw.githubusercontent.com/Aayush005-netizen/Dev-Knowledge-Base/main/Photos/ML_Notes_3.jpg)
+![ML Notes Page 1](https://raw.githubusercontent.com/Aayush005-netizen/Dev-Knowledge-Base/main/Photos/ML_Notes_4.jpg)
+![ML Notes Page 1](https://raw.githubusercontent.com/Aayush005-netizen/Dev-Knowledge-Base/main/Photos/ML_Notes_5.jpg)
+![ML Notes Page 1](https://raw.githubusercontent.com/Aayush005-netizen/Dev-Knowledge-Base/main/Photos/ML_Notes_6.jpg)
+![ML Notes Page 1](https://raw.githubusercontent.com/Aayush005-netizen/Dev-Knowledge-Base/main/Photos/ML_Notes_7.jpg)
+![ML Notes Page 1](https://raw.githubusercontent.com/Aayush005-netizen/Dev-Knowledge-Base/main/Photos/ML_Notes_8.jpg)
+![ML Notes Page 1](https://raw.githubusercontent.com/Aayush005-netizen/Dev-Knowledge-Base/main/Photos/ML_Notes_9.jpg)
+![ML Notes Page 1](https://raw.githubusercontent.com/Aayush005-netizen/Dev-Knowledge-Base/main/Photos/ML_Notes_10.jpg)
+![ML Notes Page 1](https://raw.githubusercontent.com/Aayush005-netizen/Dev-Knowledge-Base/main/Photos/ML_Notes_11.jpg)
+![ML Notes Page 1](https://raw.githubusercontent.com/Aayush005-netizen/Dev-Knowledge-Base/main/Photos/ML_Notes_12.jpg)
+![ML Notes Page 1](https://raw.githubusercontent.com/Aayush005-netizen/Dev-Knowledge-Base/main/Photos/ML_Notes_13.jpg)
+![ML Notes Page 1](https://raw.githubusercontent.com/Aayush005-netizen/Dev-Knowledge-Base/main/Photos/ML_Notes_14.jpg)
