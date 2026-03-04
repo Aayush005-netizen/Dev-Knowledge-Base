@@ -13,7 +13,7 @@
 ![ML Notes Page 1](https://raw.githubusercontent.com/Aayush005-netizen/Dev-Knowledge-Base/main/Photos/ML_Notes_11.jpg)
 ![ML Notes Page 1](https://raw.githubusercontent.com/Aayush005-netizen/Dev-Knowledge-Base/main/Photos/ML_Notes_12.jpg)
 ![ML Notes Page 1](https://raw.githubusercontent.com/Aayush005-netizen/Dev-Knowledge-Base/main/Photos/ML_Notes_13.jpg)
-![ML Notes Page 1](https://raw.githubusercontent.com/Aayush005-netizen/Dev-Knowledge-Base/main/Photos/ML_Notes_14.jpg)
+![ML Notes Page 1](https://raw.githubusercontent.com/Aayush005-netizen/Dev-Knowledge-Base/main/Photos/ML_Notes_14.jpeg)
 
 # 📊 EDA Using Univariate Analysis
 
