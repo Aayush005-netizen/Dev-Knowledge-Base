@@ -13,6 +13,8 @@
 - [Git Revert](#git-revert)
 - [Git Branches](#git-branches)
 - [Git Merge](#git-merge)
+- [Merge Conflicts](#merge-conflicts)
+- [Git Cherry-Pick](#git-cherry-pick)
 
 ---
 
@@ -850,3 +852,225 @@ git merge feature2        # now master gets all files ✅
 
 # Final master: [f1, f2, f3, feature1_file, feature2_file] ✅
 ```
+
+---
+
+## Merge Conflicts
+
+### What is a Merge Conflict?
+
+A merge conflict occurs when Git encounters **competing changes in the same part of the same file** across two different branches. Git is excellent at merging files automatically, but it draws the line when it can't logically determine which change should take precedence.
+
+#### Common Reasons for Occurrence
+
+- **Parallel Editing** — Two people (or you, on two different branches) edit the exact same line in a file.
+- **File Deletion vs. Edit** — One person deletes a file while another is modifying it.
+- **Overlapping Context** — Changes are made so close to each other that Git can't cleanly stitch the file back together.
+
+---
+
+### Behind the Scenes — The Three-Way Merge
+
+To understand a conflict, you need to understand the **Three-Way Merge algorithm** Git uses.
+
+When you merge `Branch B` into `Branch A`, Git looks at three points:
+1. The tip of **Branch A** (destination)
+2. The tip of **Branch B** (source)
+3. The **Common Ancestor** — the last point where both branches were identical
+
+#### The Logic
+
+- If a line changed in `Branch B` but stayed the same as the ancestor in `Branch A` → Git **automatically takes** the change from `Branch B`. No conflict.
+- If a line is **different in both** `Branch A` and `Branch B` compared to the ancestor → Git realizes both paths diverged from the original "truth." Since it doesn't know which one is the "new truth," it **pauses the merge** and marks the file as unmerged. This is a conflict.
+
+```
+Common Ancestor:  "Hello World"
+Branch A:         "Hello Git"       // changed
+Branch B:         "Hello Everyone"  // also changed
+→ CONFLICT: Git doesn't know which to keep
+```
+
+---
+
+### How to Resolve a Conflict
+
+When a conflict occurs, Git pauses the merge and waits for you to clean it up manually.
+
+#### Step 1 — Identify the Conflicted Files
+
+```bash
+git status
+```
+
+Files with conflicts will be listed under **"Unmerged paths"**.
+
+#### Step 2 — Open the Affected File
+
+Open the file in a text editor. Git will have inserted **conflict markers** that look like this:
+
+```
+<<<<<<< HEAD
+This is the version of the code in your current branch (e.g., main).
+=======
+This is the version of the code from the branch being merged (e.g., feature-branch).
+>>>>>>> feature-branch
+```
+
+- Everything between `<<<<<<< HEAD` and `=======` is **your current branch's version**.
+- Everything between `=======` and `>>>>>>> feature-branch` is **the incoming branch's version**.
+
+#### Step 3 — Manually Fix the Conflict
+
+Decide what the final code should look like. You can:
+- Keep **your changes** (`HEAD`)
+- Keep **their changes** (`feature-branch`)
+- **Combine** both
+- **Rewrite** the section entirely
+
+> ⚠️ **Critical:** You **must delete** the `<<<<<<<`, `=======`, and `>>>>>>>` markers after resolving. If left in, they will be saved literally into your code and likely cause a crash.
+
+#### Step 4 — Finalize the Merge
+
+Once the file is cleaned up:
+
+```bash
+# Tell Git the conflict is resolved
+git add <filename>
+
+# Commit the resolution
+git commit -m "Resolved merge conflict in <filename>"
+```
+
+---
+
+### Pro Tips for Prevention
+
+While conflicts are inevitable in large teams, these habits can minimize them significantly:
+
+- **Pull Often** — Constantly merge the main branch into your feature branch to catch small conflicts early before they snowball.
+- **Small Commits** — Large, sweeping changes across many files are conflict magnets. Keep commits focused and atomic.
+- **Communicate** — If you're going to refactor a core file, let your team know in advance.
+- **Use a GUI Tool** — If the markers are confusing, tools like **VS Code's Merge Editor**, **Meld**, or **KDiff3** provide a side-by-side visual interface that makes choosing between changes much easier.
+
+> 💡 **Tip — Abort a Merge:** If things get too messy and you want to start over, you can abort the entire merge and return to the state before it:
+> ```bash
+> git merge --abort
+> ```
+
+---
+
+## Git Cherry-Pick
+
+### What is Git Cherry-Pick?
+
+Cherry-picking is the **"surgical" alternative to merging**. While a merge brings in an entire branch's history, a cherry-pick allows you to reach into another branch and grab a **single, specific commit**.
+
+Instead of taking the whole "tree" (the branch), you are just picking one "cherry" (the commit) off it and placing it on yours. Git applies the changes from that commit onto your current branch and creates a **brand-new commit** with a new hash.
+
+---
+
+### Why is it Needed?
+
+Cherry-picking is a power-user move — you don't use it for standard workflows, but it's a lifesaver in these scenarios:
+
+- **Hotfixes** — You fix a critical bug in `main`, but you also need that exact fix in your ongoing `feature` branch without merging all of production's other unrelated updates.
+- **Recovering Misplaced Work** — You accidentally committed code to the wrong branch. Cherry-pick it onto the correct branch, then delete it from the wrong one.
+- **Collaborative Snippets** — A teammate has a specific helper function in their branch that you need, but their branch is 200 commits ahead and full of experimental code you don't want yet.
+
+---
+
+### How it Works
+
+To cherry-pick, you need the **commit hash** of the commit you want to grab. Use `git log --oneline` to find it.
+
+```bash
+# Step 1: Find the hash on the source branch
+git log --oneline
+# Example output: a1b2c3d "Fixed the login button bug"
+
+# Step 2: Switch to your target branch
+git checkout feature-branch
+
+# Step 3: Perform the pick
+git cherry-pick a1b2c3d
+```
+
+Git applies the changes from `a1b2c3d` to your current code and creates a **new commit with a new hash**. Even though the code change is identical, Git treats it as a brand-new event in your branch's timeline.
+
+---
+
+### The Snapshot vs. Patch — How Cherry-Pick Really Works
+
+A common point of confusion: *"If a commit is a full snapshot of all files, wouldn't cherry-picking bring everything with it?"*
+
+The answer lies in how Git actually operates behind the scenes.
+
+#### Snapshots vs. Diffs
+
+Technically, Git stores data as **snapshots** — when you commit, Git records the full state of your files at that moment. However, when performing operations like `cherry-pick`, `merge`, or `rebase`, Git doesn't just look at the final snapshot. It **calculates the diff** — the difference between that commit and its immediate parent.
+
+#### How the Helper Function Gets "Extracted"
+
+Imagine your teammate's branch has 200 commits and you want Commit #200 which adds a `get_user_data()` helper function:
+
+```
+Commit #199: helper function doesn't exist yet
+Commit #200: teammate adds get_user_data() — 10 lines of code
+
+git cherry-pick #200
+→ Git asks: "What is the difference between #199 and #200?"
+→ Answer: Only those 10 lines for the helper function
+→ Git applies ONLY that delta to your branch ✅
+```
+
+The 199 previous commits are completely ignored.
+
+#### The Patch Analogy
+
+Think of it this way:
+- **The Snapshot (Storage):** A photo of the entire room.
+- **The Patch (Operation):** An instruction that says *"Add a blue vase to the table."*
+
+When you cherry-pick, you aren't grabbing the photo of your teammate's room (with all their experimental furniture). You are grabbing just the instruction — *"Add a blue vase"* — and following it in your own room.
+
+#### What if the Commit Depends on Earlier Commits?
+
+If the helper function uses a variable defined in Commit #150 (which you don't have), Git will try to apply the patch but realize the context is missing. It will stop and flag a **merge conflict**, saying it can't find the code the change depends on. In that case, you would either fix the conflict manually or cherry-pick Commit #150 first.
+
+---
+
+### Git Merge vs. Git Cherry-Pick
+
+```
+🔀 GIT MERGE                         🍒 GIT CHERRY-PICK
+──────────────────────────────────   ──────────────────────────────────
+📦 Takes the whole branch            🎯 Takes one specific commit
+🕰️  Full history comes along          ✨ Brand-new independent commit
+🔗 Creates a merge commit            🆕 Creates a fresh commit
+🛠️  Routine feature integration       🚑 Hotfixes & special recoveries
+🌿 Can get messy w/ divergence       🧹 Keeps history clean & neat
+```
+
+> 🔀 **Merge** when you want everything. 🍒 **Cherry-pick** when you want just one thing.
+
+---
+
+### Concept Summary Table
+
+| Concept | How it Feels | What Git Actually Does |
+|---------|-------------|------------------------|
+| **Commit** | A full folder of files | A snapshot (stored) + a delta (calculated) |
+| **Cherry-pick** | Copying a file | Applying a diff/patch to your current state |
+| **Independence** | Branch-dependent | Commit #200 only knows what it changed from #199 |
+
+---
+
+### Aborting a Cherry-Pick
+
+If a cherry-pick causes a mess and you want to bail out entirely:
+
+```bash
+git cherry-pick --abort
+```
+
+This returns your branch to its state before the cherry-pick was attempted.
